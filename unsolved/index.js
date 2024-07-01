@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 const jest = require('jest');
 const fs = require('fs');
+const {Circle, Triangle, Square} = require('./lib/shapes.js')
 
 
 const questions = [
@@ -35,10 +36,27 @@ function writeToFile(fileName, data) {
 
 function init() {
     inquirer.prompt(questions).then(answers => {
-       const logoContent = createLogo(answers);
-       writeToFile('logo.svg',logoContent);
+        const { text, textColor, shape, shapeColor } = answers;
+        let svgContent;
+
+        switch (shape) {
+            case 'circle':
+                const circle = new Circle();
+                svgContent = circle.generateSVG(text, textColor, shapeColor);
+                break;
+            case 'triangle':
+                const triangle = new Triangle();
+                svgContent = triangle.generateSVG(text, textColor, shapeColor);
+                break;
+            case 'square':
+                const square = new Square();
+                svgContent = square.generateSVG(text, textColor, shapeColor);
+                break;
+        }
+
+        writeToFile('logo.svg', svgContent);
     });
-   };
+}
 
 
    init();
